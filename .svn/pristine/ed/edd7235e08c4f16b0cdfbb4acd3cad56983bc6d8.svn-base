@@ -1,0 +1,27 @@
+<resources>
+
+ 
+
+    <style name="myProgressBarStyleLarge">
+
+
+
+　　                        <item name="android:indeterminateDrawable">@drawable/progress_bar</item>
+
+
+
+　　                        <item name="android:minWidth">64dip</item>
+
+
+
+　　                        <item name="android:maxWidth">64dip</item>
+
+
+
+　　                        <item name="android:minHeight">64dip</item>
+
+
+
+　　                        <item name="android:maxHeight">64dip</item>
+    </style>
+</resources>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu1"
+        android:title="主线程同步调用"/>
+    <item
+        android:id="@+id/menu2"
+        android:title="子线程同步调用"/>
+    <item
+        android:id="@+id/menu3"
+        android:title="异步接口回调"/>
+
+</menu>
