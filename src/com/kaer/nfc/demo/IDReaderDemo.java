@@ -199,6 +199,14 @@ public class IDReaderDemo extends Activity implements OnClientCallback,
 	}
 
 	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		System.out.println("release");
+		mNfcReadClient.release();
+	}
+
+	@Override
 	public void readResult(IDCardItem arg0) {
 		// TODO Auto-generated method stub
 		mHandler.obtainMessage(200, arg0).sendToTarget();
@@ -315,7 +323,7 @@ public class IDReaderDemo extends Activity implements OnClientCallback,
 	@Override
 	public void updateProgress(int arg0) {
 		// TODO Auto-generated method stub
-		System.out.println("arg0.progress=" + arg0);
+		// System.out.println("arg0.progress=" + arg0);
 		mHandler.obtainMessage(100, arg0, arg0).sendToTarget();
 	}
 
