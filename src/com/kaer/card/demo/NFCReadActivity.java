@@ -1,4 +1,8 @@
-package com.kaer.nfc.demo;
+package com.kaer.card.demo;
+
+import com.kaer.sdk.IDCardItem;
+import com.kaer.sdk.OnClientCallback;
+import com.kaer.sdk.nfc.NfcReadClient;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,11 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaer.nfc.sdk.IDCardItem;
-import com.kaer.nfc.sdk.NfcReadClient;
-import com.kaer.nfc.sdk.OnClientCallback;
-
-public class IDReaderDemo extends Activity implements OnClientCallback,
+public class NFCReadActivity extends Activity implements OnClientCallback,
 		OnClickListener {
 	private NfcReadClient mNfcReadClient;
 	private TextView message;
@@ -65,13 +65,13 @@ public class IDReaderDemo extends Activity implements OnClientCallback,
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_nfc);
 		initWidget();
 		// 必须调用
 
 		mNfcReadClient = NfcReadClient.getInstance();
 
-		if (!mNfcReadClient.init(IDReaderDemo.this)) {
+		if (!mNfcReadClient.init(NFCReadActivity.this)) {
 			Toast.makeText(this, "不支持NFC或者未开启", Toast.LENGTH_SHORT).show();
 		}
 		// if (!mNfcReadClient.init(IDReaderDemo.this)) {
@@ -89,13 +89,13 @@ public class IDReaderDemo extends Activity implements OnClientCallback,
 		// TODO Auto-generated method stub
 		super.onResume();
 		// 必须调用
-		mAdapter = NfcAdapter.getDefaultAdapter(IDReaderDemo.this);
+		mAdapter = NfcAdapter.getDefaultAdapter(NFCReadActivity.this);
 
 		if (mAdapter == null) {
 			print("手机不支持NFC功能");
 		} else if (!mAdapter.isEnabled()) {
 			print("手机未打开nfc");
-			new AlertDialog.Builder(IDReaderDemo.this)
+			new AlertDialog.Builder(NFCReadActivity.this)
 					.setTitle("是否打开NFC")
 					.setPositiveButton("前往",
 							new DialogInterface.OnClickListener() {
@@ -124,7 +124,7 @@ public class IDReaderDemo extends Activity implements OnClientCallback,
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// TODO Auto-generated method stub
-		getMenuInflater().inflate(R.menu.menu_main, menu);
+		getMenuInflater().inflate(R.menu.menu_nfc, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
