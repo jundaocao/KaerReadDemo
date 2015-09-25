@@ -33,8 +33,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class NFCReadActivity extends Activity implements OnClientCallback,
-		OnClickListener {
+public class NFCReadActivity extends Activity implements OnClientCallback, OnClickListener {
 	private NfcReadClient mNfcReadClient;
 	private TextView message;
 	private EditText ipEt, portEt;
@@ -69,14 +68,10 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 		initWidget();
 		// 必须调用
 
-		mNfcReadClient = NfcReadClient.getInstance();
-
-		if (!mNfcReadClient.init(NFCReadActivity.this)) {
+		mNfcReadClient = NfcReadClient.getInstance(NFCReadActivity.this);
+        if(!mNfcReadClient.checkNfcEnable(NFCReadActivity.this)){
 			Toast.makeText(this, "不支持NFC或者未开启", Toast.LENGTH_SHORT).show();
 		}
-		// if (!mNfcReadClient.init(IDReaderDemo.this)) {
-		// Toast.makeText(this, "不支持NFC或者未开启", Toast.LENGTH_SHORT).show();
-		// }
 		mNfcReadClient.setClientCallback(this);
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "nfc");
@@ -95,19 +90,15 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 			print("手机不支持NFC功能");
 		} else if (!mAdapter.isEnabled()) {
 			print("手机未打开nfc");
-			new AlertDialog.Builder(NFCReadActivity.this)
-					.setTitle("是否打开NFC")
-					.setPositiveButton("前往",
-							new DialogInterface.OnClickListener() {
+			new AlertDialog.Builder(NFCReadActivity.this).setTitle("是否打开NFC")
+					.setPositiveButton("前往", new DialogInterface.OnClickListener() {
 
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method stub
-									startActivity(new Intent(
-											"android.settings.NFC_SETTINGS"));
-								}
-							}).setNegativeButton("否", null).create().show();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							startActivity(new Intent("android.settings.NFC_SETTINGS"));
+						}
+					}).setNegativeButton("否", null).create().show();
 		} else
 			mNfcReadClient.enableDispatch();
 		if (wl != null && !wl.isHeld())
@@ -166,7 +157,6 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 		// TODO Auto-generated method stub
 		super.onNewIntent(intent);
 		clear();
-
 		if (flag == 0) {
 			// 主线程同步调用
 			IDCardItem item = mNfcReadClient.readCardWithIntent(intent);
@@ -181,7 +171,7 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 			// 异步调用
 			mNfcReadClient.readCardWidhIntentAsync(intent);
 		}
-
+System.out.println("dfsfsfsfs");
 	}
 
 	public void print(String string) {
@@ -249,6 +239,7 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 			break;
 		case -1:
 			print("重贴标签");
+			break;
 		case -2:
 			print("未设置ip和端口");
 			break;
@@ -257,8 +248,7 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 
 			break;
 		}
-		print("读取共耗时:" + String.valueOf(System.currentTimeMillis() - startTime)
-				+ "毫秒");
+		print("读取共耗时:" + String.valueOf(System.currentTimeMillis() - startTime) + "毫秒");
 	}
 
 	private void updateView(IDCardItem item) {
@@ -273,10 +263,8 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 		sb.append("签发机关:" + item.certOrg + "\n");
 		String effDate = item.effDate;
 		String expDate = item.expDate;
-		sb.append("有效期限:" + effDate.substring(0, 4) + "."
-				+ effDate.substring(4, 6) + "." + effDate.substring(6, 8) + "-"
-				+ expDate.substring(0, 4) + "." + expDate.substring(4, 6) + "."
-				+ expDate.substring(6, 8) + "\n");
+		sb.append("有效期限:" + effDate.substring(0, 4) + "." + effDate.substring(4, 6) + "." + effDate.substring(6, 8)
+				+ "-" + expDate.substring(0, 4) + "." + expDate.substring(4, 6) + "." + expDate.substring(6, 8) + "\n");
 		print(sb.toString());
 		photoIv.setImageBitmap(scale(item.picBitmap));
 	}
@@ -289,8 +277,7 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 		Matrix matrix = new Matrix();
 		float scale = width / (4.0f * bitmap.getWidth());
 		matrix.postScale(scale, scale); // 长和宽放大缩小的比例
-		Bitmap resizeBmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-				bitmap.getHeight(), matrix, true);
+		Bitmap resizeBmp = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
 		return resizeBmp;
 	}
 
@@ -323,7 +310,7 @@ public class NFCReadActivity extends Activity implements OnClientCallback,
 	@Override
 	public void updateProgress(int arg0) {
 		// TODO Auto-generated method stub
-		// System.out.println("arg0.progress=" + arg0);
+		System.out.println("arg0.progress=" + arg0);
 		mHandler.obtainMessage(100, arg0, arg0).sendToTarget();
 	}
 

@@ -67,8 +67,7 @@ public class OtgReadActivity extends Activity implements OnClientCallback, OnCli
 		initWidget();
 		// 必须调用
 
-		mOtgReadClient = OtgReadClient.getInstance();
-		mOtgReadClient.init(OtgReadActivity.this);
+		mOtgReadClient = OtgReadClient.getInstance(OtgReadActivity.this);
 		mOtgReadClient.setClientCallback(this);
 		pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wl = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "nfc");
@@ -76,14 +75,16 @@ public class OtgReadActivity extends Activity implements OnClientCallback, OnCli
 		findViewById(R.id.readBtn).setOnClickListener(this);
 
 	}
-
+@Override
+protected void onNewIntent(Intent intent) {
+	// TODO Auto-generated method stub
+	super.onNewIntent(intent);
+System.out.println("onNewIntent");
+}
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if (!mOtgReadClient.connectDevice(OtgReadActivity.this)) {
-			Toast.makeText(OtgReadActivity.this, "未发现可用设备", Toast.LENGTH_LONG).show();
-		}
 		if (wl != null && !wl.isHeld())
 			wl.acquire();
 	}
@@ -177,6 +178,15 @@ public class OtgReadActivity extends Activity implements OnClientCallback, OnCli
 			break;
 		case -2:
 			print("未设置ip和端口");
+			break;
+		case -3:
+			print("读取中，请等待操作完成");
+			break;
+		case -4:
+			print("不支持的设备");
+			break;
+		case -5:
+			print("设备没有获取到许可");
 			break;
 		default:
 			print("错误码:" + arg0.retCode);
